@@ -2,6 +2,13 @@
 
 ### ***pyke elysia***
 
+![only for window](https://img.shields.io/badge/only%20for-window-blue)
+
+### `path.to_current_path()`
+
+目前，同个磁盘中(如：`D:/` -> `D:\dev`)，建议使用相对路径。
+而在跨磁盘中(如：`D:/` -> `E:/`)，可以使用绝对路径。
+
 #### 开发原因
 
 由于家中网络问题，不得不多次进行 `git push` 操作，
