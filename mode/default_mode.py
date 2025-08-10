@@ -1,7 +1,6 @@
 import subprocess
-
-import check
 import util
+from mode import check
 
 
 def say_name():
@@ -11,8 +10,8 @@ def say_name():
 def default_mode():
     """
     默认模式：
-    默认为在该目录下推送 git
-    不断推送，直到推送成功
+    默认为在该目录下推送 git，
+    不断推送，直到推送成功。
     """
     util.print_success("Get into default mode.")
 
@@ -63,9 +62,9 @@ def check_output(output: str) -> int:
     """
     分析输出，确定情况
     return:
-    - -1：出现未知错误
-    -  0: 已经是最新状态
-    -  1: 网络链接重置
+     -1：出现未知错误;
+      0: 已经是最新状态;
+      1: 网络链接重置;
     """
     if output.find("Everything up-to-date") != -1:
         util.print_success("Remote repository is latest.")
@@ -73,6 +72,12 @@ def check_output(output: str) -> int:
     if output.find("Connect was reset") != -1:
         util.print_error("Push error: Connect was reset.")
         return 1
+    if output.find("Could not connect to server") != -1:
+        util.print_error("Push error: Could not connect to server.")
+        return 2
+    if output.find("completed") != -1:
+        util.print_success("Push successfully.")
+        return 3
     util.print_error("Push error: unknow wrong.")
     return -1
 
