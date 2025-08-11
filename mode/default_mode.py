@@ -70,7 +70,7 @@ def check_output(output: str) -> int:
     if output.find("Everything up-to-date") != -1:
         util.print_success("Remote repository is latest.")
         return 0
-    if output.find("Connect was reset") != -1:
+    if output.find("Connection was reset") != -1:
         util.print_error("Push error: Connect was reset.")
         return 1
     if output.find("Could not connect to server") != -1:
