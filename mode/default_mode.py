@@ -47,8 +47,13 @@ def default_mode():
         responses = subprocess.run(["git", "push"],
                                    shell=True,
                                    stderr=subprocess.PIPE,
+                                   stdout=subprocess.PIPE,
                                    encoding= "gbk")
         error = responses.stderr
+        output = responses.stdout
+        print(output, end="")
+        print("--------------------")
+        print(output, end="")
         output_code = check_output(error)
         if output_code == -1:
             return
@@ -66,7 +71,6 @@ def check_output(output: str) -> int:
       0: 已经是最新状态;
       1: 网络链接重置;
     """
-    print(output, end="")
     if output.find("Everything up-to-date") != -1:
         util.print_success("Remote repository is latest.")
         return 0
@@ -79,6 +83,9 @@ def check_output(output: str) -> int:
     if output.find("completed") != -1:
         util.print_success("Push successfully.")
         return 3
+    if output.find("Could not resolve host") != -1:
+        util.print_error("Push error: Could not resolve host.")
+        return 4
     util.print_error("Push error: unknow wrong.")
     return -1
 
