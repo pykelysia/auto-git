@@ -53,7 +53,7 @@ def default_mode():
         output = responses.stdout
         print(output, end="")
         print("--------------------")
-        print(output, end="")
+        print(error, end="")
         output_code = check_output(error)
         if output_code == -1:
             return
