@@ -51,44 +51,26 @@ def default_mode():
                                    encoding= "gbk")
         error = responses.stderr
         output = responses.stdout
-        print(output, end="")
-        print("--------------------")
-        print(error, end="")
-        output_code = check_output(error)
-        if output_code == -1:
-            return
-        if output_code == 0:
-            is_push_over = True
-
+        if responses.returncode == 0:
+            util.print_success("Push over.")
+            break
+        else:
+            check_output(error)
     util.print_end("Push git repository.")
 
 
-def check_output(output: str) -> int:
-    """
-    分析输出，确定情况
-    return:
-     -1：出现未知错误;
-      0: 已经是最新状态;
-      1: 网络链接重置;
-    """
-    if output.find("Everything up-to-date") != -1:
-        util.print_success("Remote repository is latest.")
-        return 0
+def check_output(output: str):
+    # 128
     if output.find("Connection was reset") != -1:
-        util.print_error("Push error: Connect was reset.")
-        return 1
-    if output.find("Could not connect to server") != -1:
-        util.print_error("Push error: Could not connect to server.")
-        return 2
-    if output.find("completed") != -1:
-        util.print_success("Push successfully.")
-        return 3
-    if output.find("Could not resolve host") != -1:
-        util.print_error("Push error: Could not resolve host.")
-        return 4
-    util.print_error("Push error: unknow wrong.")
-    return -1
-
+        util.print_error("Connect was reset.")
+    # 128
+    elif output.find("Could not connect to server") != -1:
+        util.print_error("Could not connect to server.")
+    # 128
+    elif output.find("Could not resolve host") != -1:
+        util.print_error("Could not resolve host.")
+    else:
+        util.print_error("Unknow wrong.")
 
 if __name__ == '__main__':
     say_name()
