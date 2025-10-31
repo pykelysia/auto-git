@@ -3,10 +3,9 @@ import sys
 import path
 import mode
 import util
-from path import to_current_path
 
-shortopts = 'dp'
-longopts = ['default', 'path']
+shortopts = 'd:f'
+longopts = ['default', 'fast']
 
 def main():
     if run_with_cmd():
@@ -26,11 +25,13 @@ def main():
         mode.default_mode()
 
 def run_with_cmd()->bool:
-    opts, args = getopt.getopt(sys.argv[1:], shortopts, longopts)
+    opts, args = getopt.gnu_getopt(sys.argv[1:], shortopts, longopts)
     for o, a in opts:
-        if o in ('-p', '--path'):
-            to_current_path(a)
         if o in ('-d', '--default'):
+            path.to_current_path(a)
+            mode.default_mode()
+            return True
+        if o in ('-f', '--fast') :
             mode.default_mode()
             return True
     return False
