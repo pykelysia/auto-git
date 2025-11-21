@@ -32,4 +32,36 @@ auto-git/
 └── path.py
 ```
 ##
+
+## 使用
+
+### 一、从源码开始
+
+#### 1.获取源码
+
+```shell
+git clone <this_git_repo>
+cd ./auto_git
+```
+
+#### 2.打包脚本后使用
+
+```shell
+# 安装打包工具
+pip install pyinstaller
+
+# 打包脚本
+pyinstaller -F main.py
+
+# 默认模式下选择路径运行
+./main.exe -d <git_repo_need_push>
+
+# 快速 push 文件所在 git 仓库
+./main.exe -f
+```
+
+#### 3.直接使用脚本
+
+将 `2.打包脚本后使用` 中的 `./main.exe` 替换为 `python main.py` 即可。
+
 ***创建于2025/8/8***
