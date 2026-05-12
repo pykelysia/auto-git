@@ -1,0 +1,13 @@
+[project]
+name = "auto-git"
+version = "0.1.0"
+description = "Automated git sync tool — keeps local and remote in sync with retry logic"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = ["typer>=0.15"]
+
+[project.scripts]
+auto-git = "auto_git.cli:app"
+
+[tool.uv]
+package = true
