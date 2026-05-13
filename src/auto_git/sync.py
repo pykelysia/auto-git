@@ -72,6 +72,23 @@ def _push_with_retry(cwd: str | None = None) -> bool:
     return False
 
 
+def _push_new_branch_with_retry(branch: str, cwd: str | None = None) -> bool:
+    for i, delay in enumerate(RETRY_DELAYS):
+        result = _git.push_upstream(branch, cwd=cwd)
+        if result.ok:
+            return True
+        if _is_network_error(result.stderr):
+            ui.warn(
+                f"Network error, retrying in {delay}s... ({i + 1}/{MAX_RETRIES})"
+            )
+            time.sleep(delay)
+        else:
+            ui.error(f"Push failed: {result.stderr}")
+            return False
+    ui.error("Max retries reached, push aborted.")
+    return False
+
+
 def _check_conflict(cwd: str | None = None) -> list[str]:
     result = _git.unmerged_files(cwd=cwd)
     if result.ok and result.stdout:
@@ -112,11 +129,12 @@ def sync_repo(path: str = ".", rebase: bool = False) -> SyncState:
 
         upstream_result = _git.get_upstream(cwd=path)
         if not upstream_result.ok:
-            ui.warn(
-                f'Branch "{branch}" has no upstream configured.\n'
-                f"  To set one up, run: git push -u origin {branch}"
-            )
-            return SyncState.NO_UPSTREAM
+            ui.start(f'Pushing new branch "{branch}" and setting upstream...')
+            ok = _push_new_branch_with_retry(branch, cwd=path)
+            if not ok:
+                return SyncState.NETWORK_ERROR
+            ui.success(f'Branch "{branch}" pushed with upstream configured.')
+            continue
 
         ab = _get_ahead_behind(cwd=path)
         if ab is None:

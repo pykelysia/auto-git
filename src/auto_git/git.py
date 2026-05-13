@@ -51,6 +51,10 @@ def push(cwd: str | None = None) -> GitResult:
     return _run("push", cwd=cwd)
 
 
+def push_upstream(branch: str, cwd: str | None = None) -> GitResult:
+    return _run("push", "-u", "origin", branch, cwd=cwd)
+
+
 def current_branch(cwd: str | None = None) -> GitResult:
     return _run("rev-parse", "--abbrev-ref", "HEAD", cwd=cwd)
 
