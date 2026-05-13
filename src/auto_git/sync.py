@@ -47,7 +47,10 @@ def _is_network_error(stderr: str) -> bool:
     signals = [
         "connection was reset",
         "could not connect",
+        "couldn't connect",
+        "failed to connect",
         "could not resolve host",
+        "name or service not known",
         "timed out",
         "connection refused",
         "network is unreachable",
