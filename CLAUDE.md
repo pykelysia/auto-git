@@ -38,3 +38,4 @@ pyinstaller -F main.py
 - The main loop in `default_mode.py` calls `git push` with `shell=True` and `encoding="gbk"`. Error output is parsed against known failure strings (connection reset, server unreachable, DNS failure). Unknown errors fall through to retry.
 - `-f`/`--fast` runs default mode in current directory without path prompt.
 - `-d`/`--default` combines path navigation and default mode in one command.
+
